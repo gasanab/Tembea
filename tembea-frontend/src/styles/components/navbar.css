@@ -1,0 +1,19 @@
+.site-nav {
+  backdrop-filter: blur(18px);
+  background: rgba(255, 255, 255, 0.96);
+  border-bottom: 1px solid rgba(20, 90, 50, 0.12);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+}
+
+.site-nav:hover {
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.brand-dot {
+  background: var(--color-primary);
+  border-radius: 999px;
+  height: 0.72rem;
+  width: 0.72rem;
+}

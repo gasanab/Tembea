@@ -1,0 +1,12 @@
+[data-theme="dark"] {
+  --surface: #06140d;
+  --surface-raised: rgba(8, 31, 18, 0.84);
+  --surface-soft: #0e2417;
+  --text: #ffffff;
+  --text-subtle: #b4c6bb;
+}
+
+[data-theme="dark"] body {
+  background: var(--surface);
+  color: var(--text);
+}

@@ -1,0 +1,10 @@
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: 270px minmax(0, 1fr);
+  min-height: 100vh;
+  background: #f5fbf7;
+}
+
+.dashboard-main {
+  padding: 1.25rem;
+}

@@ -1,0 +1,14 @@
+.text-muted {
+  color: var(--color-muted);
+}
+
+.bg-mist {
+  background: var(--color-mist);
+}
+
+.text-gradient-green {
+  background: linear-gradient(110deg, var(--color-dark-green), var(--color-primary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

@@ -1,0 +1,11 @@
+.stack-sm > * + * {
+  margin-top: 0.6rem;
+}
+
+.stack-md > * + * {
+  margin-top: 1rem;
+}
+
+.stack-lg > * + * {
+  margin-top: 1.5rem;
+}

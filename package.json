@@ -1,0 +1,17 @@
+{
+  "name": "tembea-platform",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:frontend": "npm --prefix tembea-frontend run dev",
+    "dev:backend": "npm --prefix tembea-backend run dev",
+    "build": "npm --prefix tembea-backend run build && npm --prefix tembea-frontend run build",
+    "typecheck": "npm --prefix tembea-backend run typecheck && npm --prefix tembea-frontend run typecheck",
+    "lint": "npm --prefix tembea-backend run lint:check && npm --prefix tembea-frontend run lint",
+    "test": "npm --prefix tembea-backend test -- --runInBand && npm --prefix tembea-frontend run test",
+    "check": "npm run typecheck && npm run lint && npm run test && npm run build"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,14 @@
+.field-control {
+  background: #ffffff;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  min-height: 3rem;
+  outline: none;
+  padding: 0.75rem 0.9rem;
+  width: 100%;
+}
+
+.field-control:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px rgba(46, 204, 113, 0.18);
+}

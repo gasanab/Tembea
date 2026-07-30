@@ -1,0 +1,9 @@
+.tembea-container {
+  width: min(var(--container), calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+.page-shell {
+  min-height: 100vh;
+  background: var(--color-white);
+}

@@ -1,0 +1,96 @@
+{
+  "nav": {
+    "home": "Home",
+    "hotels": "Hotels",
+    "apartments": "Apartments",
+    "restaurants": "Restaurants",
+    "events": "Events",
+    "experiences": "Experiences",
+    "madeInRwanda": "Made in Rwanda",
+    "transport": "Transport",
+    "tourGuides": "Tour Guides",
+    "explore": "Explore",
+    "whyRwanda": "Why Rwanda?",
+    "more": "More",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "dashboard": "Dashboard",
+    "wishlist": "Wishlist",
+    "notifications": "Notifications",
+    "signOut": "Sign Out"
+  },
+  "home": {
+    "hero": {
+      "kicker": "Rwanda's #1 Tourism Marketplace",
+      "headline": "Discover the Land of a Thousand Hills",
+      "subtitle": "Book hotels, experiences, transport, restaurants & more — all in one place.",
+      "search": "Search Rwanda..."
+    },
+    "categories": "Categories",
+    "exploreByCategory": "Explore by category",
+    "viewAll": "View All",
+    "featured": "Featured",
+    "premiumServices": "Premium travel services",
+    "stats": {
+      "partners": "Verified Partners",
+      "listings": "Curated Listings",
+      "travelers": "Happy Travelers",
+      "regions": "Tourism Regions"
+    },
+    "cta": {
+      "headline": "Ready to explore Rwanda?",
+      "subtitle": "Join thousands of travelers who use Tembea to plan their perfect Rwanda trip.",
+      "getStarted": "Get Started Free",
+      "explore": "Explore Listings"
+    }
+  },
+  "booking": {
+    "bookNow": "Book Now",
+    "getTickets": "Get Tickets",
+    "buyNow": "Buy Now",
+    "reserveTable": "Reserve Table",
+    "bookGuide": "Book Guide",
+    "bookRide": "Book Ride",
+    "selectDate": "Select date",
+    "quantity": "Quantity",
+    "serviceFee": "Service fee",
+    "total": "Total",
+    "freeCancellation": "Free cancellation",
+    "securePayment": "Secure payment",
+    "verifiedPartner": "Verified partner"
+  },
+  "auth": {
+    "welcomeBack": "Welcome back",
+    "signInSubtitle": "Sign in to manage your Rwanda travel",
+    "email": "Email",
+    "password": "Password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "signIn": "Sign In",
+    "signingIn": "Signing in...",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign up",
+    "createAccount": "Create your account",
+    "signUpSubtitle": "Join Rwanda's tourism marketplace",
+    "fullName": "Full name",
+    "confirmPassword": "Confirm password",
+    "traveler": "Traveler",
+    "partner": "Partner / Business",
+    "createAccountBtn": "Create account",
+    "creatingAccount": "Creating account...",
+    "alreadyHaveAccount": "Already have an account?",
+    "orContinueWith": "Or continue with",
+    "orSignUpWith": "Or sign up with"
+  },
+  "common": {
+    "save": "Save",
+    "share": "Share",
+    "back": "Back",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "notFound": "Not found",
+    "viewAll": "View All",
+    "bookNow": "Book Now",
+    "learnMore": "Learn more"
+  }
+}

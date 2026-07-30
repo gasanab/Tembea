@@ -1,0 +1,611 @@
+// ─── Tembea — Prisma Schema ─────────────────────────────────────────────────
+// All enums and models derived directly from the frontend's TypeScript types.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ──────────────────────────────────────────────────────────────────
+
+enum Role {
+  CLIENT
+  PARTNER
+  ADMIN
+}
+
+enum PartnerStatus {
+  PENDING
+  VERIFIED
+  SUSPENDED
+}
+
+enum PartnerCategory {
+  ACCOMMODATION
+  PARKS
+  EVENTS
+  MARKETPLACE
+  RESTAURANTS
+  TOURS
+  TRANSPORT
+  MUSEUMS
+  MEMORIAL_SITES
+  GUIDES
+}
+
+enum ListingType {
+  ACCOMMODATION
+  PARKS
+  EVENTS
+  MARKETPLACE
+  RESTAURANTS
+  TOURS
+  TRANSPORT
+  MUSEUMS
+  MEMORIAL_SITES
+  GUIDES
+}
+
+enum ListingAvailability {
+  AVAILABLE
+  FEW_LEFT
+  FULLY_BOOKED
+  CLOSED
+}
+
+enum BookingStatus {
+  PENDING
+  APPROVED
+  CONFIRMED
+  COMPLETED
+  REJECTED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  UNPAID
+  PAID
+  REFUNDED
+}
+
+enum NotificationType {
+  INFO
+  SUCCESS
+  WARNING
+  ERROR
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum VehicleType {
+  CAR
+  BUS
+  VAN
+  MOTORBIKE
+  MINIBUS
+  TRUCK
+}
+
+enum PayoutStatus {
+  PENDING
+  PROCESSING
+  PAID
+  REJECTED
+}
+
+// ─── Models ─────────────────────────────────────────────────────────────────
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(CLIENT)
+  avatar       String?
+  phone        String?
+  language     String?  @default("en")
+  region       String?
+  interests    String[] // e.g. ["accommodation", "tours", "events"]
+  verified     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  partner             Partner?
+  bookings            Booking[]
+  orders              Order[]
+  reviews             Review[]
+  notifications       Notification[]
+  wishlist            Wishlist[]
+  tokens              RefreshToken[]
+  passwordResetTokens PasswordResetToken[]
+  clientConversations Conversation[]       @relation("ClientConversations")
+  sentMessages        Message[]            @relation("SentMessages")
+  payoutRequests      PayoutRequest[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("refresh_tokens")
+}
+
+model Partner {
+  id           String          @id @default(cuid())
+  userId       String          @unique
+  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businessName String
+  category     PartnerCategory
+  status       PartnerStatus   @default(PENDING)
+  documents    String[] // URLs to uploaded verification docs
+  website      String?
+  phone        String?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  listings       Listing[]
+  conversations  Conversation[]
+  payoutRequests PayoutRequest[]
+
+  @@map("partners")
+}
+
+model Listing {
+  id           String              @id @default(cuid())
+  partnerId    String
+  partner      Partner             @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  type         ListingType
+  name         String
+  location     String
+  region       String
+  city         String?
+  description  String
+  images       String[]
+  price        Float // base price (per night / per ticket / per day / etc.)
+  priceLabel   String              @default("per night") // shown in UI
+  rating       Float               @default(0)
+  reviewCount  Int                 @default(0)
+  availability ListingAvailability @default(AVAILABLE)
+  featured     Boolean             @default(false)
+  published    Boolean             @default(false)
+  coordinates  Json? // { lat: Float, lng: Float }
+  extraData    Json // type-specific fields stored as JSONB
+
+  // extraData shape per type:
+  // ACCOMMODATION: { propertyType, roomsAvailable, amenities[] }
+  // PARKS:         { entryFee, slotsAvailable, activities[], bestSeason }
+  // EVENTS:        { venue, date, time, ticketsAvailable, ticketPrice, category, bannerImage }
+  // MARKETPLACE:   { inStock, category, seller, madeInRwanda, price }
+  // RESTAURANTS:   { cuisineType[], priceRange, tablesAvailable, amenities[] }
+  // TOURS:         { duration, slotsAvailable, difficulty, included[] }
+  // TRANSPORT:     { vehicleType, transmission, seats, features[], pricePerDay }
+  // MUSEUMS:       { entryFee, openingHours, exhibits[], guidedToursAvailable }
+  // MEMORIAL_SITES:{ entryFee, openingHours, historicalSignificance, guidedToursAvailable }
+  // GUIDES:        { yearsOfExperience, certificates[], languages[], specialties[], pricePerDay }
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bookings         Booking[]
+  reviews          Review[]
+  wishlist         Wishlist[]
+  conversations    Conversation[]
+  rooms            Room[]
+  ticketCategories EventTicketCategory[]
+  products         Product[]
+  vehicles         Vehicle[]
+  guideProfile     GuideProfile?
+  experienceDetail ExperienceDetail?
+
+  @@map("listings")
+}
+
+model Booking {
+  id              String        @id @default(cuid())
+  clientReference String?       @unique
+  userId          String
+  user            User          @relation(fields: [userId], references: [id])
+  listingId       String
+  listing         Listing       @relation(fields: [listingId], references: [id])
+  type            ListingType
+  status          BookingStatus @default(PENDING)
+  amount          Float
+  currency        String        @default("USD")
+  guests          Int           @default(1)
+  bookingData     Json
+  startAt         DateTime?
+  endAt           DateTime?
+  units           Int           @default(1)
+  holdExpiresAt   DateTime?
+
+  // bookingData shape per type:
+  // ACCOMMODATION:  { checkIn, checkOut, roomType, specialRequests, roomId? }
+  // RESTAURANTS:    { date, time, specialRequests }
+  // EVENTS:         { ticketType, quantity, ticketCategoryId? }
+  // PARKS/TOURS:    { date, package, participants }
+  // TRANSPORT:      { pickupDate, returnDate, driverRequested, pickupLocation, vehicleId? }
+  // GUIDES:         { date, package, tourPackageId? }
+  // MARKETPLACE:    { quantity, deliveryAddress }
+
+  roomId           String?
+  room             Room?                @relation(fields: [roomId], references: [id])
+  ticketCategoryId String?
+  ticketCategory   EventTicketCategory? @relation(fields: [ticketCategoryId], references: [id])
+  vehicleId        String?
+  vehicle          Vehicle?             @relation(fields: [vehicleId], references: [id])
+  tourPackageId    String?
+  tourPackage      TourPackage?         @relation(fields: [tourPackageId], references: [id])
+
+  payment   Payment?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, createdAt])
+  @@index([listingId, status, createdAt])
+  @@index([listingId, status, startAt, endAt])
+  @@index([roomId, status, startAt, endAt])
+  @@index([ticketCategoryId, status])
+  @@index([vehicleId, status, startAt, endAt])
+  @@index([tourPackageId, status, startAt, endAt])
+  @@index([status, holdExpiresAt])
+  @@index([status, createdAt])
+  @@map("bookings")
+}
+
+model Payment {
+  id                 String        @id @default(cuid())
+  bookingId          String?       @unique
+  booking            Booking?      @relation(fields: [bookingId], references: [id])
+  orderId            String?       @unique
+  order              Order?        @relation(fields: [orderId], references: [id])
+  gross              Float // full amount paid by customer
+  commission         Float // platform 10% fee
+  net                Float // payout to partner (gross - commission)
+  currency           String        @default("USD")
+  status             PaymentStatus @default(UNPAID)
+  provider           String? // "flutterwave" | "stripe"
+  providerRef        String? // external payment/transaction ID from provider
+  checkoutUrl        String?
+  webhookProcessedAt DateTime?
+  paidAt             DateTime?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  @@unique([provider, providerRef])
+  @@index([status, paidAt])
+  @@index([currency, status])
+  @@map("payments")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id])
+  rating    Int // 1–5
+  comment   String
+  reply     String? // partner's public reply
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, listingId]) // one review per user per listing
+  @@map("reviews")
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      NotificationType @default(INFO)
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  @@map("notifications")
+}
+
+model Wishlist {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, listingId])
+  @@map("wishlists")
+}
+
+// ─── Messaging ────────────────────────────────────────────────────────────────
+// Conversation between a client (guest) and a partner about a specific listing
+
+model Conversation {
+  id        String    @id @default(cuid())
+  clientId  String
+  client    User      @relation("ClientConversations", fields: [clientId], references: [id])
+  partnerId String
+  partner   Partner   @relation(fields: [partnerId], references: [id])
+  listingId String?
+  listing   Listing?  @relation(fields: [listingId], references: [id])
+  messages  Message[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@unique([clientId, partnerId, listingId])
+  @@map("conversations")
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String
+  sender         User         @relation("SentMessages", fields: [senderId], references: [id])
+  body           String
+  read           Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+
+  @@map("messages")
+}
+
+// ─── Password Reset ────────────────────────────────────────────────────────────
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("password_reset_tokens")
+}
+
+// ─── Admin Settings ────────────────────────────────────────────────────────────
+
+model PlatformSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+
+  @@map("platform_settings")
+}
+
+// ─── Hotel / Apartment Rooms ───────────────────────────────────────────────────
+
+model Room {
+  id          String    @id @default(cuid())
+  listingId   String
+  listing     Listing   @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  name        String // "Deluxe Suite", "Standard Room", "Executive Suite"
+  description String?
+  capacity    Int       @default(1)
+  price       Float // price per night
+  images      String[]
+  amenities   String[] // ["WiFi", "AC", "TV", "Mini Bar"]
+  available   Boolean   @default(true)
+  totalRooms  Int       @default(1)
+  bookings    Booking[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([listingId, available])
+  @@map("rooms")
+}
+
+// ─── Event Ticket Categories ───────────────────────────────────────────────────
+
+model EventTicketCategory {
+  id          String    @id @default(cuid())
+  listingId   String
+  listing     Listing   @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  name        String // "VIP", "Premium", "Standard", "Student"
+  description String?
+  price       Float
+  totalSeats  Int
+  soldSeats   Int       @default(0)
+  color       String? // hex color for UI display
+  perks       String[] // ["Meet & Greet", "Front Row", "Gift Pack"]
+  bookings    Booking[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([listingId])
+  @@map("event_ticket_categories")
+}
+
+// ─── Marketplace Products ──────────────────────────────────────────────────────
+
+model Product {
+  id          String   @id @default(cuid())
+  listingId   String
+  listing     Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  price       Float
+  stock       Int      @default(0)
+  sold        Int      @default(0)
+  images      String[]
+  category    String? // "Basket", "Painting", "Sculpture", "Clothing"
+  sku         String? // product code
+  weight      Float? // for shipping calculations
+  tags        String[]
+  featured    Boolean  @default(false)
+  orders      Order[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([listingId, featured])
+  @@map("products")
+}
+
+// ─── Product Orders ────────────────────────────────────────────────────────────
+
+model Order {
+  id              String      @id @default(cuid())
+  clientReference String?     @unique
+  userId          String
+  user            User        @relation(fields: [userId], references: [id])
+  productId       String
+  product         Product     @relation(fields: [productId], references: [id])
+  quantity        Int
+  amount          Float // quantity × price at time of order
+  currency        String      @default("USD")
+  status          OrderStatus @default(PENDING)
+  deliveryAddress String?
+  deliveryNotes   String?
+  deliveryAgent   String? // name/contact of assigned delivery person
+  trackingNumber  String?
+  payment         Payment?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([userId, createdAt])
+  @@index([productId, status, createdAt])
+  @@index([status, createdAt])
+  @@map("orders")
+}
+
+// ─── Transport Vehicles ────────────────────────────────────────────────────────
+
+model Vehicle {
+  id              String      @id @default(cuid())
+  listingId       String
+  listing         Listing     @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  make            String // "Toyota", "Mercedes"
+  model           String // "Prado", "Sprinter"
+  year            Int?
+  type            VehicleType @default(CAR)
+  capacity        Int         @default(4)
+  plateNumber     String?
+  color           String?
+  transmission    String      @default("automatic") // "automatic" | "manual"
+  fuelType        String      @default("petrol")
+  features        String[] // ["AC", "GPS", "WiFi", "Baby Seat"]
+  pricePerDay     Float
+  driverAvailable Boolean     @default(false)
+  driverName      String?
+  driverPhone     String?
+  driverLicense   String?
+  images          String[]
+  available       Boolean     @default(true)
+  bookings        Booking[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([listingId, available])
+  @@map("vehicles")
+}
+
+// ─── Tour Guide Profiles ───────────────────────────────────────────────────────
+
+model GuideProfile {
+  id              String        @id @default(cuid())
+  listingId       String        @unique
+  listing         Listing       @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  bio             String?
+  languages       String[] // ["English", "French", "Kinyarwanda"]
+  certifications  String[] // ["Rwanda Tourism Board Certified"]
+  yearsExperience Int?
+  specialties     String[] // ["Wildlife", "History", "Culture", "Bird Watching"]
+  availability    String[] // days available: ["Mon", "Tue", "Wed"]
+  responseTime    String        @default("within 24 hours")
+  packages        TourPackage[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@map("guide_profiles")
+}
+
+// ─── Tour Packages ─────────────────────────────────────────────────────────────
+
+model TourPackage {
+  id          String       @id @default(cuid())
+  guideId     String
+  guide       GuideProfile @relation(fields: [guideId], references: [id], onDelete: Cascade)
+  name        String // "Kigali City Tour", "Genocide Memorial Tour"
+  description String?
+  duration    String // "3 hours", "Full Day", "2 Days"
+  price       Float
+  maxGuests   Int          @default(10)
+  includes    String[] // ["Transport", "Lunch", "Entry Fees"]
+  excludes    String[] // ["Personal Expenses"]
+  itinerary   String? // markdown or plain text
+  available   Boolean      @default(true)
+  bookings    Booking[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@map("tour_packages")
+}
+
+// ─── Experience Details ────────────────────────────────────────────────────────
+// Extends listings of type PARKS, MUSEUMS, MEMORIAL_SITES, TOURS
+
+model ExperienceDetail {
+  id              String   @id @default(cuid())
+  listingId       String   @unique
+  listing         Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  entryFee        Float? // per person
+  openingTime     String? // "08:00"
+  closingTime     String? // "18:00"
+  closedDays      String[] // ["Sunday", "Monday"]
+  packages        String[] // available experience names
+  highlights      String[] // ["Big Five", "Boat Safari", "Gorilla Trekking"]
+  ageLimit        String? // "All ages" or "12+"
+  maxGroupSize    Int?
+  guidedTours     Boolean  @default(false)
+  bookingRequired Boolean  @default(true)
+  facilities      String[] // ["Parking", "Restrooms", "Gift Shop", "Restaurant"]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("experience_details")
+}
+
+// ─── Partner Payout Requests ───────────────────────────────────────────────────
+
+model PayoutRequest {
+  id            String       @id @default(cuid())
+  partnerId     String
+  partner       Partner      @relation(fields: [partnerId], references: [id])
+  userId        String
+  user          User         @relation(fields: [userId], references: [id])
+  amount        Float // requested payout amount
+  currency      String       @default("USD")
+  bankName      String?
+  accountName   String?
+  accountNumber String?
+  mobileNumber  String? // for mobile money
+  method        String       @default("bank") // "bank" | "mobile_money"
+  status        PayoutStatus @default(PENDING)
+  notes         String?
+  processedAt   DateTime?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@index([partnerId, currency, status, createdAt])
+  @@index([status, createdAt])
+  @@map("payout_requests")
+}

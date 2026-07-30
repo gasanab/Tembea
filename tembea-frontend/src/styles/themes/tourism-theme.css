@@ -1,0 +1,12 @@
+.tourism-surface {
+  background:
+    radial-gradient(circle at top left, rgba(46, 204, 113, 0.18), transparent 34rem),
+    linear-gradient(180deg, #ffffff 0%, #f5fbf7 52%, #ffffff 100%);
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(18px);
+}

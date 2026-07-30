@@ -1,0 +1,20 @@
+.smart-search {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-glass, 0 20px 60px rgba(0, 0, 0, 0.14));
+  padding: 0.55rem;
+}
+
+.search-tab {
+  border-radius: var(--radius-sm);
+  color: #234333;
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 0.62rem 0.78rem;
+}
+
+.search-tab.active {
+  background: var(--color-dark-green);
+  color: #ffffff;
+}

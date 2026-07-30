@@ -1,0 +1,90 @@
+{
+  "nav": {
+    "home": "Ahabanza",
+    "hotels": "Ibicumbi",
+    "apartments": "Amazu",
+    "restaurants": "Restoransi",
+    "events": "Ibikorwa",
+    "experiences": "Uburambe",
+    "madeInRwanda": "Ibyakozwe mu Rwanda",
+    "transport": "Gutwara",
+    "tourGuides": "Abayobozi b'ingendo",
+    "explore": "Shakisha",
+    "whyRwanda": "Kuki Rwanda?",
+    "more": "Ibindi",
+    "signIn": "Injira",
+    "signUp": "Iyandikishe",
+    "dashboard": "Ikibaho",
+    "wishlist": "Urutonde",
+    "notifications": "Amamenyesha",
+    "signOut": "Sohoka"
+  },
+  "home": {
+    "hero": {
+      "kicker": "Ahantu h'ingendo mu Rwanda",
+      "headline": "Menya Igihugu cy'Imisozi Igihumbi",
+      "subtitle": "Fata ibicumbi, uburambe, gutwara, restoransi n'ibindi — ahantu hamwe.",
+      "search": "Shakisha mu Rwanda..."
+    },
+    "categories": "Amoko",
+    "exploreByCategory": "Shakisha mu moko",
+    "viewAll": "Reba Byose",
+    "featured": "Byatoranijwe",
+    "premiumServices": "Serivisi z'ingendo zo hejuru",
+    "cta": {
+      "headline": "Witeguye kuzindura Rwanda?",
+      "subtitle": "Injira hamwe n'ibihumbi by'abagenzi bakoresha Tembea gutegura ingendo yabo mu Rwanda.",
+      "getStarted": "Tangira Ubuntu",
+      "explore": "Reba Urutonde"
+    }
+  },
+  "booking": {
+    "bookNow": "Fata Ubu",
+    "getTickets": "Fata Tiketi",
+    "buyNow": "Gura Ubu",
+    "reserveTable": "Bika Imeza",
+    "bookGuide": "Fata Umuyobozi",
+    "bookRide": "Fata Ingendo",
+    "selectDate": "Hitamo itariki",
+    "quantity": "Umubare",
+    "serviceFee": "Amafaranga ya serivisi",
+    "total": "Igiteranyo",
+    "freeCancellation": "Guhagarika ubuntu",
+    "securePayment": "Kwishyura birinzwe",
+    "verifiedPartner": "Umunyamuryango wemejwe"
+  },
+  "auth": {
+    "welcomeBack": "Murakaza neza",
+    "signInSubtitle": "Injira gucunga ingendo zawe mu Rwanda",
+    "email": "Imeyili",
+    "password": "Ijambo ry'ibanga",
+    "rememberMe": "Nzibutse",
+    "forgotPassword": "Wibagiwe ijambo ry'ibanga?",
+    "signIn": "Injira",
+    "signingIn": "Injira...",
+    "noAccount": "Nta konti ufite?",
+    "signUp": "Iyandikishe",
+    "createAccount": "Fungura konti yawe",
+    "signUpSubtitle": "Injira mu isoko ry'ingendo mu Rwanda",
+    "fullName": "Amazina yose",
+    "confirmPassword": "Emeza ijambo ry'ibanga",
+    "traveler": "Umugenzi",
+    "partner": "Umunyamuryango / Sosiyete",
+    "createAccountBtn": "Fungura konti",
+    "creatingAccount": "Gufungura konti...",
+    "alreadyHaveAccount": "Usanzwe ufite konti?",
+    "orContinueWith": "Cyangwa komeza na",
+    "orSignUpWith": "Cyangwa iyandikishe na"
+  },
+  "common": {
+    "save": "Bika",
+    "share": "Sangira",
+    "back": "Garuka",
+    "loading": "Gutegereza...",
+    "error": "Hari ikosa ryabaye",
+    "notFound": "Ntibibonetse",
+    "viewAll": "Reba Byose",
+    "bookNow": "Fata Ubu",
+    "learnMore": "Menya ibindi"
+  }
+}

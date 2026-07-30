@@ -1,0 +1,18 @@
+:root {
+  --color-primary: #2ecc71;
+  --color-dark-green: #145a32;
+  --color-light-green: #d5f5e3;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-mist: #f5fbf7;
+  --color-line: rgba(20, 90, 50, 0.14);
+  --color-muted: #5f6f66;
+  --color-sun: #f7c948;
+  --color-sky: #cfeef7;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --shadow-soft: 0 18px 48px rgba(20, 90, 50, 0.12);
+  --shadow-card: 0 12px 36px rgba(0, 0, 0, 0.09);
+  --container: 1180px;
+}

@@ -1,0 +1,6 @@
+.park-stat {
+  background: rgba(213, 245, 227, 0.82);
+  border-radius: var(--radius-md);
+  color: var(--color-dark-green);
+  padding: 0.8rem;
+}

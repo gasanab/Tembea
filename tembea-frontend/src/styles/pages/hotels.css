@@ -1,0 +1,11 @@
+.availability-pill {
+  align-items: center;
+  background: var(--color-light-green);
+  border-radius: 999px;
+  color: var(--color-dark-green);
+  display: inline-flex;
+  font-size: 0.78rem;
+  font-weight: 800;
+  gap: 0.35rem;
+  padding: 0.38rem 0.7rem;
+}

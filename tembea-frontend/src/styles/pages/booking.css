@@ -1,0 +1,13 @@
+.checkout-shell {
+  background: linear-gradient(180deg, #f5fbf7 0%, #ffffff 100%);
+  min-height: 100vh;
+}
+
+.step-dot {
+  align-items: center;
+  border-radius: 999px;
+  display: inline-flex;
+  height: 2rem;
+  justify-content: center;
+  width: 2rem;
+}

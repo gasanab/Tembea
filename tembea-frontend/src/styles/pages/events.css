@@ -1,0 +1,9 @@
+.event-date {
+  background: #000000;
+  border-radius: var(--radius-md);
+  color: #ffffff;
+  font-weight: 800;
+  min-width: 4.2rem;
+  padding: 0.65rem;
+  text-align: center;
+}

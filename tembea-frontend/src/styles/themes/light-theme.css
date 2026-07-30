@@ -1,0 +1,8 @@
+:root,
+[data-theme="light"] {
+  --surface: #ffffff;
+  --surface-raised: rgba(255, 255, 255, 0.86);
+  --surface-soft: #f5fbf7;
+  --text: #000000;
+  --text-subtle: #5f6f66;
+}

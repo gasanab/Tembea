@@ -1,0 +1,14 @@
+.loader-ring {
+  animation: spin 800ms linear infinite;
+  border: 3px solid rgba(46, 204, 113, 0.22);
+  border-radius: 999px;
+  border-top-color: var(--color-primary);
+  height: 2rem;
+  width: 2rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

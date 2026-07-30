@@ -1,0 +1,6 @@
+.rating-stars {
+  align-items: center;
+  color: #e0a900;
+  display: inline-flex;
+  gap: 0.14rem;
+}
